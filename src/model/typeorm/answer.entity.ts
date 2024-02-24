@@ -10,6 +10,9 @@ export class AnswerEntity {
   content: string;
   @Column({nullable: true})
   order: number;
+  @Column({nullable: true})
+  correct: number;
+  
   
   @ManyToOne(() => QuestionEntity, { eager: true, nullable: false })
   @JoinColumn({ name: "question", referencedColumnName: "id" })

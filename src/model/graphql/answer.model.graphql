@@ -5,12 +5,14 @@
 input SetAnswer {
     id: ID
     description: String
+    correct: Boolean
     order: Int
 }
 
 type Answer {
     id: ID!
     description: String!
+    correct: Boolean
     order: Int
 }
 
