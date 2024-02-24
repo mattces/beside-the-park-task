@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { QuizEntity } from "./quiz.entity";
+import { QuestionType } from "../graphql/graphql";
 
 @Entity('questions')
 export class QuestionEntity {
@@ -10,6 +11,8 @@ export class QuestionEntity {
   description: string;
   @Column()
   points: number;
+  @Column()
+  type: QuestionType;
   
   /*TODO: Set up a question type enum property here after creating a QuestionType enum with GraphQL*/
 
