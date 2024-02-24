@@ -1,0 +1,19 @@
+"""
+- If no ID is provided, a new question will be created. If ID is omitted, other properties, save for answer mustn't be null.
+- For any other property, if omitted, it will remain unchanged on the existing quiz object.
+"""
+input SetQuestion {
+    id: ID
+    type: QuestionType
+    description: String
+    answers: SetAnswer
+    points: Int
+}
+
+type Question {
+    id: ID!
+    type: QuestionType!
+    description: String!
+    answers: [Answer!]!
+    points: Int!
+}

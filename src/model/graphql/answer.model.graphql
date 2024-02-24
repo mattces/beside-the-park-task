@@ -1,0 +1,22 @@
+"""
+- If no ID is provided, a new quiz will be created. If ID is omitted, other properties, save for order mustn't be null (order is nullable).
+- For any other property, if omitted, it will remain unchanged on the existing quiz object.
+"""
+input SetAnswer {
+    id: ID
+    description: String
+    order: Int
+}
+
+type Answer {
+    id: ID!
+    description: String!
+    order: Int
+}
+
+enum QuestionType {
+    SingleChoice # 0
+    MultipleChoice # 1
+    OpenEnded # 2
+    Ordering # 3
+}
