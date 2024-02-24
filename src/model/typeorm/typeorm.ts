@@ -3,9 +3,9 @@ import { config as dotenvConfig } from "dotenv";
 import { DataSource, DataSourceOptions } from "typeorm";
 import * as process from "process";
 
-
-dotenvConfig({ path: ".env.development.local" });
-
+if (process.env.NODE_ENV == "development") {
+  dotenvConfig({ path: ".env.development.local" });
+}
 
 const config = {
   type: "postgres",
