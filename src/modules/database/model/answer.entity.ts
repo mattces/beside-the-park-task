@@ -10,7 +10,7 @@ export class Answer {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(type => String)
+  @Field()
   @Column({length: 1024})
   description: string;
   @Field(type => Int)
