@@ -1,5 +1,5 @@
 import { Args, ID, Resolver, Query } from "@nestjs/graphql";
-import { Quiz } from "../../database/services/quiz/quiz.entity";
+import { Quiz } from "../../database/model/quiz.entity";
 
 @Resolver(of => Quiz)
 export class QuizResolver {

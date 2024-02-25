@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Quiz } from "../quiz/quiz.entity";
+import { Quiz } from "./quiz.entity";
 import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
-import { Answer } from "../answer/answer.entity";
+import { Answer } from "./answer.entity";
 
 enum QuestionType {
   SingleChoice,
