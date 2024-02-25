@@ -13,11 +13,11 @@ export class Answer {
   @Field()
   @Column({length: 1024})
   description: string;
-  @Field(type => Int)
+  @Field(type => Int, {nullable: true})
   @Column({nullable: true})
   order: number;
   
-  @Field()
+  @Field({nullable: true})
   @Column({nullable: true})
   correct: boolean;
   
