@@ -8,9 +8,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { DatabaseModule } from './modules/database/database.module';
-import { QuizResolver } from './resolvers/quiz/quiz.resolver';
-import { QuestionResolver } from './resolvers/question/question.resolver';
-import { AnswerResolver } from './resolvers/answer/answer.resolver';
+import { QuizResolver } from './resolvers/quiz.resolver';
 
 
 import typeorm from "./config/typeorm";
@@ -36,7 +34,7 @@ import typeorm from "./config/typeorm";
     DatabaseModule
   ],
   controllers: [AppController],
-  providers: [AppService, QuizResolver, QuestionResolver, AnswerResolver]
+  providers: [AppService, QuizResolver]
 })
 export class AppModule {
 }
