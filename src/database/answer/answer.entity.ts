@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { QuestionEntity } from "./question.entity";
+import { QuestionEntity } from "../question/question.entity";
 
 @Entity('answers')
 export class AnswerEntity {

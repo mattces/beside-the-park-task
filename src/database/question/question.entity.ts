@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { QuizEntity } from "./quiz.entity";
+import { QuizEntity } from "../quiz/quiz.entity";
 import { QuestionType } from "../graphql/graphql";
 
 @Entity('questions')
