@@ -17,10 +17,6 @@ export class Answer {
   @Column({nullable: true})
   order: number;
   
-  
-  @Field(type=> [Question])
-  questions: Question[]
-  
   @ManyToOne(() => Question, { eager: true, nullable: false })
   @JoinColumn({ name: "question", referencedColumnName: "id" })
   question: Question;
