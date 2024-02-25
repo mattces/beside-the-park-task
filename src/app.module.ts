@@ -8,10 +8,10 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { DatabaseModule } from './modules/database/database.module';
-import { QuizResolver } from './resolvers/quiz.resolver';
 
 
 import typeorm from "./config/typeorm";
+import { QuizModule } from "./modules/quiz/quiz.module";
 
 
 @Module({
@@ -31,10 +31,11 @@ import typeorm from "./config/typeorm";
         useFactory: async (configService: ConfigService) => configService.get("typeorm")
       }
     ),
-    DatabaseModule
+    DatabaseModule,
+    QuizModule
   ],
   controllers: [AppController],
-  providers: [AppService, QuizResolver]
+  providers: [AppService]
 })
 export class AppModule {
 }
