@@ -11,10 +11,13 @@ export class QuizService {
   ) {}
   
   async findAll(): Promise<Quiz[]> {
-    return await this.quizRepository.find()
+    return await this.quizRepository.find().catch(
+      e =>  { throw new Error(`Failed to fetch quizzes: ${e.message}`); }
+    );
   }
-  async findOneById(id: string): Promise<Quiz> {
-    return await this.quizRepository.findOneBy({id});
+  async findOneById(id: string): Promise<Quiz | null> {
+    return await this.quizRepository.findOneBy({id}).catch(
+      e =>  { throw new Error(`Failed to fetch quiz ${id}: ${e.message}`); }
+    );
   }
-  
 }

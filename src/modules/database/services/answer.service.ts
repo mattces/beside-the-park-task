@@ -11,6 +11,8 @@ export class AnswerService {
   ) {
   }
   async findAll(questionId: string): Promise<Answer[]> {
-    return await this.answerRepository.findBy({question: {id: questionId}})
+    return await this.answerRepository.findBy({question: {id: questionId}}).catch(
+      e =>  { throw new Error(`Failed to fetch answers for question ${questionId}: ${e.message}`); }
+    );
   }
-}
+} 
