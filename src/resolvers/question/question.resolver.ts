@@ -1,4 +1,4 @@
 import { Resolver } from '@nestjs/graphql';
 
-@Resolver()
+@Resolver('Question')
 export class QuestionResolver {}
