@@ -7,7 +7,7 @@ export class AnswerEntity {
   id: string;
   
   @Column({length: 1024})
-  content: string;
+  description: string;
   @Column({nullable: true})
   order: number;
   
