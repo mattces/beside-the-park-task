@@ -13,7 +13,7 @@ export class QuestionService {
 
   async findAll(quizId: string): Promise<Question[]> {
     try {
-      return await this.questionRepository.findBy({ quiz: { id: quizId } });
+      return await this.questionRepository.find({where: { quiz: { id: quizId } }, order: {order: 'ASC'}}, );
     } catch (e) {
       throw new TypeORMError(`Failed to fetch questions for quiz ${quizId}: ${e.message}`);
     }

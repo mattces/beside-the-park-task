@@ -46,21 +46,25 @@ export class QuizService {
       await this.queryRunner.manager.save(Quiz, quiz);
 
       const questions: Question[] = [];
+      let questionOrder = 0;
 
       for (const questionInput of quizInput.questions) {
 
-        const question = this.queryRunner.manager.create(Question, { ...questionInput, quiz: quiz });
+        const question = this.queryRunner.manager.create(Question, { ...questionInput, quiz: quiz,  order: questionOrder  });
         await this.queryRunner.manager.save(Question, question);
 
         const answers: Answer[] = [];
         for (const answerInput of questionInput.answers) {
-          const answer = this.queryRunner.manager.create(Answer, { ...answerInput, question: question });
+          
+          const answer = this.queryRunner.manager.create(Answer, { ...answerInput, question: question});
           await this.queryRunner.manager.save(Answer, answer);
 
           answers.push(answer);
         }
         question.answers = answers;
         questions.push(question);
+        
+        questionOrder++;
       }
 
       await this.queryRunner.commitTransaction();
