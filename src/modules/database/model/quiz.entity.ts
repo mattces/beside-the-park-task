@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Question } from "./question.entity";
 
 @ObjectType()
 @Entity('quizzes')
@@ -15,4 +16,7 @@ export class Quiz {
   @Field()
   @Column({length: 2048})
   description: string;
+  
+  @Field(type => [Question])
+  questions: Question[];
 }
