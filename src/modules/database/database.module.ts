@@ -10,6 +10,7 @@ import { Question } from "./model/question.entity";
 
 @Module({
   providers: [AnswerService, QuestionService, QuizService],
-  imports: [TypeOrmModule.forFeature([Quiz, Question, Answer])]
+  imports: [TypeOrmModule.forFeature([Quiz, Question, Answer])],
+  exports: [AnswerService, QuizService, QuestionService]
 })
 export class DatabaseModule {}
