@@ -18,7 +18,7 @@ import typeorm from "./model/typeorm/typeorm";
       driver: ApolloDriver,
       typePaths: ["./**/*.graphql"],
       definitions: {
-        path: join(process.cwd(), "src/model/graphql/graphql.ts"),
+        path: join(process.cwd(), "src/graphql.ts"),
         outputAs: "class"
       }
     }),
