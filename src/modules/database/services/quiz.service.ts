@@ -42,31 +42,31 @@ export class QuizService {
     try {
       await this.queryRunner.startTransaction();
 
-      const newQuiz = this.queryRunner.manager.create(Quiz, quizInput);
-      await this.queryRunner.manager.save(Quiz, newQuiz);
+      const quiz = this.queryRunner.manager.create(Quiz, quizInput);
+      await this.queryRunner.manager.save(Quiz, quiz);
 
-      const newQuestions: Question[] = [];
+      const questions: Question[] = [];
 
       for (const questionInput of quizInput.questions) {
 
-        const newQuestion = this.queryRunner.manager.create(Question, { ...questionInput, quiz: newQuiz });
-        await this.queryRunner.manager.save(Question, newQuestion);
+        const question = this.queryRunner.manager.create(Question, { ...questionInput, quiz: quiz });
+        await this.queryRunner.manager.save(Question, question);
 
-        const newAnswers: Answer[] = [];
+        const answers: Answer[] = [];
         for (const answerInput of questionInput.answers) {
-          const newAnswer = this.queryRunner.manager.create(Answer, { ...answerInput, question: newQuestion });
-          await this.queryRunner.manager.save(Answer, newAnswer);
+          const answer = this.queryRunner.manager.create(Answer, { ...answerInput, question: question });
+          await this.queryRunner.manager.save(Answer, answer);
 
-          newAnswers.push(newAnswer);
+          answers.push(answer);
         }
-        newQuestion.answers = newAnswers;
-        newQuestions.push(newQuestion);
+        question.answers = answers;
+        questions.push(question);
       }
 
       await this.queryRunner.commitTransaction();
 
-      newQuiz.questions = newQuestions;
-      return newQuiz;
+      quiz.questions = questions;
+      return quiz;
     } catch (e) {
       await this.queryRunner.rollbackTransaction();
       throw new TypeORMError(`Failed to create new quiz (${JSON.stringify(quizInput)}): ${e.message}`);
