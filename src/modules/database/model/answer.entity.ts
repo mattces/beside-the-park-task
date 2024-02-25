@@ -17,6 +17,10 @@ export class Answer {
   @Column({nullable: true})
   order: number;
   
+  @Field()
+  @Column()
+  correct: boolean;
+  
   @ManyToOne(() => Question, { eager: true, nullable: false })
   @JoinColumn({ name: "question", referencedColumnName: "id" })
   question: Question;
