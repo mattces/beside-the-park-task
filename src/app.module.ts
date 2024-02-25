@@ -7,9 +7,10 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
+import { DatabaseModule } from './database/database.module';
 
 
-import typeorm from "./model/typeorm/typeorm";
+import typeorm from "./config/typeorm";
 
 
 @Module({
@@ -32,7 +33,8 @@ import typeorm from "./model/typeorm/typeorm";
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => configService.get("typeorm")
       }
-    )
+    ),
+    DatabaseModule
   ],
   controllers: [AppController],
   providers: [AppService]
