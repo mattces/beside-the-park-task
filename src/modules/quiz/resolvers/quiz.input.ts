@@ -1,6 +1,7 @@
-import { Field, InputType, Int } from "@nestjs/graphql";
-import { QuestionType } from "../../database/model/question.entity";
+import { Field, ID, InputType, Int } from "@nestjs/graphql";
+import { Question, QuestionType } from "../../database/model/question.entity";
 import { IsNotEmpty, ValidateIf } from "class-validator";
+import { Answer } from "../../database/model/answer.entity";
 
 @InputType()
 export class CreateQuizInput {
@@ -16,6 +17,7 @@ export class CreateQuizInput {
   @IsNotEmpty()
   questions: CreateQuestionInput[];
 }
+
 @InputType()
 export class CreateQuestionInput {
   @Field()
@@ -26,7 +28,7 @@ export class CreateQuestionInput {
   @IsNotEmpty()
   points: number;
   
-  @Field()
+  @Field(type => QuestionType)
   @IsNotEmpty()
   type: QuestionType;
   
@@ -54,3 +56,17 @@ export class CreateAnswerInput {
   @Field({nullable: true})
   correct: boolean;
 }
+
+@InputType()
+export class SubmitAnswersInput {
+  @Field(type => ID)
+  quizId: string
+  @Field(type => [SubmitAnswersForQuestionInput])
+  answers: SubmitAnswersForQuestionInput[]
+}
+@InputType()
+export class SubmitAnswersForQuestionInput {
+  @Field(type => [ID])
+  answersIds: string[]
+}
+

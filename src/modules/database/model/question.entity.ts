@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Quiz } from "./quiz.entity";
-import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ID, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { Answer } from "./answer.entity";
 
 export enum QuestionType {
@@ -9,6 +9,8 @@ export enum QuestionType {
   OpenEnded,
   Ordering
 }
+
+registerEnumType(QuestionType, {name: 'QuestionType'})
 
 @ObjectType()
 @Entity('questions')
