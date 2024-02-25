@@ -18,7 +18,7 @@ export class Answer {
   order: number;
   
   @Field()
-  @Column()
+  @Column({nullable: true})
   correct: boolean;
   
   @ManyToOne(() => Question, { eager: true, nullable: false })
