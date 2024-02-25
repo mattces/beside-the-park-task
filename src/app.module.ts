@@ -20,11 +20,7 @@ import typeorm from "./config/typeorm";
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      typePaths: ["./**/*.graphql"],
-      definitions: {
-        path: join(process.cwd(), "src/graphql.ts"),
-        outputAs: "class"
-      }
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     ConfigModule.forRoot({
       isGlobal: true,

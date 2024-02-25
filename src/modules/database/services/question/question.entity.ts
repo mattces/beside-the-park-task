@@ -1,22 +1,38 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { QuizEntity } from "../quiz/quiz.entity";
-import { QuestionType } from "../../../../graphql";
+import { Quiz } from "../quiz/quiz.entity";
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
+import { Answer } from "../answer/answer.entity";
 
+enum QuestionType {
+  SingleChoice,
+  MultipleChoice,
+  OpenEnded,
+  Ordering
+}
+
+@ObjectType()
 @Entity('questions')
-export class QuestionEntity {
+export class Question {
+  @Field(type => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
   
+  @Field()
   @Column({length: 2048})
   description: string;
+  
+  @Field(type => Int)
   @Column()
   points: number;
+  
+  @Field()
   @Column()
   type: QuestionType;
   
-  /*TODO: Set up a question type enum property here after creating a QuestionType enum with GraphQL*/
+  @Field(type => [Answer])
+  answers: Answer[]
 
-  @ManyToOne(() => QuizEntity, { eager: true, nullable: false })
+  @ManyToOne(() => Quiz, { eager: true, nullable: false })
   @JoinColumn({ name: "quiz", referencedColumnName: "id" })
-  quiz: QuizEntity;
+  quiz: Quiz;
 }

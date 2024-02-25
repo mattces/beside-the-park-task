@@ -1,17 +1,27 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { QuestionEntity } from "../question/question.entity";
+import { Question } from "../question/question.entity";
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 
+
+@ObjectType()
 @Entity('answers')
-export class AnswerEntity {
+export class Answer {
+  @Field(type => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
-  
+
+  @Field(type => String)
   @Column({length: 1024})
   description: string;
+  @Field(type => Int)
   @Column({nullable: true})
   order: number;
   
-  @ManyToOne(() => QuestionEntity, { eager: true, nullable: false })
+  
+  @Field(type=> [Question])
+  questions: Question[]
+  
+  @ManyToOne(() => Question, { eager: true, nullable: false })
   @JoinColumn({ name: "question", referencedColumnName: "id" })
-  question: QuestionEntity;
+  question: Question;
 }
