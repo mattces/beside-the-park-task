@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Question } from "../model/question.entity";
-import { Repository, TypeORMError } from "typeorm";
+import { DeepPartial, Repository, TypeORMError } from "typeorm";
 
 @Injectable()
 export class QuestionService {
@@ -15,7 +15,33 @@ export class QuestionService {
     try {
       return await this.questionRepository.findBy({ quiz: { id: quizId } });
     } catch (e) {
-      throw new TypeORMError(`Failed to questions for quiz ${quizId}: ${e.message}`);
+      throw new TypeORMError(`Failed to fetch questions for quiz ${quizId}: ${e.message}`);
+    }
+  }
+
+  create(questionObject: Omit<Question, "id" | "answers">): Question {
+    try {
+      return this.questionRepository.create(questionObject);
+    } catch (e) {
+      throw new TypeORMError(`Failed to create new question (${JSON.stringify(questionObject)}): ${e.message}`);
+    }
+  }
+
+  async update(id: string, questionObject: DeepPartial<Omit<Question, "id" | "answers">>): Promise<Question> {
+    try {
+      await this.questionRepository.update(id, questionObject);
+      /**A find one method will never be needed in this service.*/
+      return await this.questionRepository.findOneBy({ id });
+    } catch (e) {
+      throw new TypeORMError(`Failed to update question (ID ${id}, ${JSON.stringify(questionObject)}): ${e.message}`);
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.questionRepository.delete(id);
+    } catch (e) {
+      throw new TypeORMError(`Failed to delete question (ID ${id}): ${e.message}`);
     }
   }
 }
