@@ -3,7 +3,7 @@ import { Quiz } from "./quiz.entity";
 import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 import { Answer } from "./answer.entity";
 
-enum QuestionType {
+export enum QuestionType {
   SingleChoice,
   MultipleChoice,
   OpenEnded,
