@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { QuizEntity } from "../quiz/quiz.entity";
-import { QuestionType } from "../graphql/graphql";
+import { QuestionType } from "../../../../model/graphql/graphql";
 
 @Entity('questions')
 export class QuestionEntity {
