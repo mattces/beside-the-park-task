@@ -17,6 +17,9 @@ export class Question {
   @PrimaryGeneratedColumn("uuid")
   id: string;
   
+  @Column()
+  order: number;
+  
   @Field()
   @Column({length: 2048})
   description: string;
