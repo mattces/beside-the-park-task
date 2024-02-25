@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Answer } from "../model/answer.entity";
-import { Repository } from "typeorm";
+import { Repository, TypeORMError } from "typeorm";
 
 @Injectable()
 export class AnswerService {
@@ -10,9 +10,12 @@ export class AnswerService {
     private readonly answerRepository: Repository<Answer>
   ) {
   }
+
   async findAll(questionId: string): Promise<Answer[]> {
-    return await this.answerRepository.findBy({question: {id: questionId}}).catch(
-      e =>  { throw new Error(`Failed to fetch answers for question ${questionId}: ${e.message}`); }
-    );
+    try {
+      return await this.answerRepository.findBy({ question: { id: questionId } });
+    } catch (e) {
+      throw new TypeORMError(`Failed to questions for question (ID ${questionId}): ${e.message}`);
+    }
   }
 } 
