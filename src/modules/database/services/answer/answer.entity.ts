@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { QuestionEntity } from "./question.entity";
+import { QuestionEntity } from "../question/question.entity";
 
 @Entity('answers')
 export class AnswerEntity {
@@ -7,7 +7,7 @@ export class AnswerEntity {
   id: string;
   
   @Column({length: 1024})
-  content: string;
+  description: string;
   @Column({nullable: true})
   order: number;
   

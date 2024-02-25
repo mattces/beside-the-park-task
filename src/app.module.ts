@@ -7,12 +7,13 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
+import { DatabaseModule } from './modules/database/database.module';
 import { QuizResolver } from './resolvers/quiz/quiz.resolver';
 import { QuestionResolver } from './resolvers/question/question.resolver';
 import { AnswerResolver } from './resolvers/answer/answer.resolver';
 
 
-import typeorm from "./model/typeorm/typeorm";
+import typeorm from "./config/typeorm";
 
 
 @Module({
@@ -21,7 +22,7 @@ import typeorm from "./model/typeorm/typeorm";
       driver: ApolloDriver,
       typePaths: ["./**/*.graphql"],
       definitions: {
-        path: join(process.cwd(), "src/model/graphql/graphql.ts"),
+        path: join(process.cwd(), "src/graphql.ts"),
         outputAs: "class"
       }
     }),
@@ -35,7 +36,8 @@ import typeorm from "./model/typeorm/typeorm";
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => configService.get("typeorm")
       }
-    )
+    ),
+    DatabaseModule
   ],
   controllers: [AppController],
   providers: [AppService, QuizResolver, QuestionResolver, AnswerResolver]
