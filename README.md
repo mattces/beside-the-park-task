@@ -40,8 +40,6 @@ The correct quiz creation input schema is as follows:
 10. `Order` question answers must have the `order` property.
 11. `Order` question answers must have unique `order` (no two answers can have the same `order`);
 
-The `createQuiz` mutation is used to create a quiz. Here's a sample mutation:
-
 # Checking score
 
 The correct input schema to check score looks as follows:
