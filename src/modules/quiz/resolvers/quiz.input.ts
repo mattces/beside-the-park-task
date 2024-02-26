@@ -58,13 +58,6 @@ export class CreateAnswerInput {
 }
 
 @InputType()
-export class SubmitAnswersInput {
-  @Field(type => ID)
-  quizId: string
-  @Field(type => [SubmitAnswersForQuestionInput])
-  answers: SubmitAnswersForQuestionInput[]
-}
-@InputType()
 export class SubmitAnswersForQuestionInput {
   @Field(type => [String])
   answerDescriptions: string[]
