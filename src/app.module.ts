@@ -7,20 +7,18 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
+import { DatabaseModule } from './modules/database/database.module';
 
 
-import typeorm from "./model/typeorm/typeorm";
+import typeorm from "./config/typeorm";
+import { QuizModule } from "./modules/quiz/quiz.module";
 
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      typePaths: ["./**/*.graphql"],
-      definitions: {
-        path: join(process.cwd(), "src/model/graphql/graphql.ts"),
-        outputAs: "class"
-      }
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -32,7 +30,9 @@ import typeorm from "./model/typeorm/typeorm";
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => configService.get("typeorm")
       }
-    )
+    ),
+    DatabaseModule,
+    QuizModule
   ],
   controllers: [AppController],
   providers: [AppService]
