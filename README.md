@@ -2,6 +2,8 @@
 
 To launch the app, use:
 ```bash
+git clone https://github.com/mattces/beside-the-park-task
+cd beside-the-park-task
 docker-compose up
 ```
 
