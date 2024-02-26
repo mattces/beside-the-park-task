@@ -86,7 +86,7 @@ export class ScoreService {
       throw new HttpException("Only one answer can be submitted for a open ended question.", HttpStatus.BAD_REQUEST);
     }
     
-    const punctuationPattern =/[^\s\w\d]gi/
+    const punctuationPattern =/[^\s\w\d]/g
 
     const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s/);
     const correctAnswer = questions.answers[0].description.replace(punctuationPattern, "").toLowerCase().split(/\s/);
