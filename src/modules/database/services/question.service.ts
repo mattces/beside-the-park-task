@@ -19,29 +19,4 @@ export class QuestionService {
     }
   }
 
-  create(questionObject: Omit<Question, "id" | "answers">): Question {
-    try {
-      return this.questionRepository.create(questionObject);
-    } catch (e) {
-      throw new TypeORMError(`Failed to create new question (${JSON.stringify(questionObject)}): ${e.message}`);
-    }
-  }
-
-  async update(id: string, questionObject: DeepPartial<Omit<Question, "id" | "answers">>): Promise<Question> {
-    try {
-      await this.questionRepository.update(id, questionObject);
-      /**A find one method will never be needed in this service.*/
-      return await this.questionRepository.findOneBy({ id });
-    } catch (e) {
-      throw new TypeORMError(`Failed to update question (ID ${id}, ${JSON.stringify(questionObject)}): ${e.message}`);
-    }
-  }
-
-  async delete(id: string): Promise<void> {
-    try {
-      await this.questionRepository.delete(id);
-    } catch (e) {
-      throw new TypeORMError(`Failed to delete question (ID ${id}): ${e.message}`);
-    }
-  }
 }
