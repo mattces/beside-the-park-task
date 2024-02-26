@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "schema-sync": "npm run typeorm schema:sync -- --dataSource src/model/typeorm/config/"
+    "schema-sync": "npm run typeorm schema:sync -- --dataSource src/config/typeorm.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.10.0",
