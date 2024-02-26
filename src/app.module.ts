@@ -18,6 +18,8 @@ import { QuizModule } from "./modules/quiz/quiz.module";
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      csrfPrevention: false,
+      playground: true, 
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     ConfigModule.forRoot({
