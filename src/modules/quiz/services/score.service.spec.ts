@@ -206,4 +206,162 @@ describe("ScoreService", () => {
     });
 
   });
+
+  describe("logic", () => {
+    it("should correctly calculate points for SingleChoice question", async () => {
+      const questions = [
+        {
+          description: "Question 1",
+          type: QuestionType.SingleChoice,
+          points: 2
+        },
+        {
+          description: "Question 2",
+          type: QuestionType.SingleChoice,
+          points: 4
+        }
+      ] as Partial<Question>[];
+
+      const answers =
+        [
+          {
+            description: "Answer 1",
+            correct: false
+          },
+          {
+            description: "Answer 2",
+            correct: true
+          },
+          {
+            description: "Answer 3",
+            correct: false
+          }
+        ] as Partial<Answer>[];
+      
+      questionServiceMock.findAll.mockReturnValue(questions);
+      answerServiceMock.findAll.mockReturnValue(answers);
+      
+      await expect(service.getScore("12345", [["Answer 2"], ["Answer 2"]])).resolves.toHaveProperty('scored', 6);
+      await expect(service.getScore("12345", [["Answer 1"], ["Answer 2"]])).resolves.toHaveProperty('scored', 4);
+      await expect(service.getScore("12345", [["Answer 2"], ["Answer 1"]])).resolves.toHaveProperty('scored', 2);
+      await expect(service.getScore("12345", [["Answer 3"], ["Answer 3"]])).resolves.toHaveProperty('scored', 0);
+    });
+
+    it("should correctly calculate points for MultipleChoice question", async () => {
+      const questions = [
+        {
+          description: "Question 1",
+          type: QuestionType.MultipleChoice,
+          points: 7
+        }
+      ] as Partial<Question>[];
+
+      const answers =
+        [
+          {
+            description: "Answer 1",
+            correct: true
+          },
+          {
+            description: "Answer 2",
+            correct: true
+          },
+          {
+            description: "Answer 3",
+            correct: false
+          },
+          {
+            description: "Answer 4",
+            correct: false
+          },
+          {
+            description: "Answer 5",
+            correct: false
+          }
+        ] as Partial<Answer>[];
+      
+      const correctAnswersCount = answers.reduce((total, answer) => {
+        if (answer.correct) {
+          return ++total;
+        }
+        return total;
+      }, 0);
+
+      questionServiceMock.findAll.mockReturnValue(questions);
+      answerServiceMock.findAll.mockReturnValue(answers);
+
+      await expect(service.getScore("12345", [["Answer 2", "Answer 3"]])).resolves.toHaveProperty('scored', 0);
+      await expect(service.getScore("12345", [["Answer 2", "Answer 1"]])).resolves.toHaveProperty('scored', 2/correctAnswersCount * questions[0].points);
+      await expect(service.getScore("12345", [["Answer 2", "Answer 5", "Answer 4", "Answer 1"]])).resolves.toHaveProperty('scored', 0);
+      await expect(service.getScore("12345", [["Answer 4"]])).resolves.toHaveProperty('scored', 0);
+    });
+
+    it("should correctly calculate points for Ordering question", async () => {
+      const questions = [
+        {
+          description: "Question 1",
+          type: QuestionType.Ordering,
+          points: 7
+        }
+      ] as Partial<Question>[];
+
+      const answers =
+        [
+          {
+            description: "Answer 1",
+            order: 1
+          },
+          {
+            description: "Answer 2",
+            order: 2
+          },
+          {
+            description: "Answer 3",
+            order: 3
+          },
+          {
+            description: "Answer 4",
+            order: 4
+          },
+          {
+            description: "Answer 5",
+            order: 5
+          }
+        ] as Partial<Answer>[];
+
+
+      questionServiceMock.findAll.mockReturnValue(questions);
+      answerServiceMock.findAll.mockReturnValue(answers);
+
+      await expect(service.getScore("12345", [["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5"]])).resolves.toHaveProperty('scored', 7);
+      await expect(service.getScore("12345", [["Answer 2", "Answer 1", "Answer 3", "Answer 4", "Answer 5"]])).resolves.toHaveProperty('scored', 0);
+    });
+
+    it("should correctly calculate points for OpenEnded question", async () => {
+      const questions = [
+        {
+          description: "Who started the napoleonic wars?",
+          type: QuestionType.OpenEnded,
+          points: 7
+        }
+      ] as Partial<Question>[];
+
+      const answers =
+        [
+          {
+            description: "Napoleon Bonaparte",
+          },
+        ] as Partial<Answer>[];
+
+
+      questionServiceMock.findAll.mockReturnValue(questions);
+      answerServiceMock.findAll.mockReturnValue(answers);
+
+      await expect(service.getScore("12345", [["NAPOLEON, BONAPARTE"]])).resolves.toHaveProperty('scored', 7);
+      await expect(service.getScore("12345", [["naplen bonapart"]])).resolves.toHaveProperty('scored', 0);
+      await expect(service.getScore("12345", [["napoleon                bonaparte"]])).resolves.toHaveProperty('scored', 7);
+      await expect(service.getScore("12345", [["napoleon!                bonaparte!"]])).resolves.toHaveProperty('scored', 7);
+      await expect(service.getScore("12345", [["Napolen Bonaparte"]])).resolves.toHaveProperty('scored', 0);
+    });
+  });
 });
