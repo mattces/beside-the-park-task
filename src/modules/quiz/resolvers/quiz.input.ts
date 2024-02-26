@@ -46,15 +46,11 @@ export class CreateAnswerInput {
   @IsNotEmpty()
   description: string;
   
-  @ValidateIf(o => o.correct == null)
-  @IsNotEmpty()
   @Field({nullable: true})
-  order: number;
+  order: number | null;
 
-  @ValidateIf(o => o.order == null)
-  @IsNotEmpty()
   @Field({nullable: true})
-  correct: boolean;
+  correct: boolean | null;
 }
 
 @InputType()
