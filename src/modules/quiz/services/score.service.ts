@@ -61,17 +61,24 @@ export class ScoreService {
     if (submittedAnswers.length > question.answers.length) {
       throw new HttpException(`Too many answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
     }
+    
+    let wrongOrder = false;
+    
     for (const answerDescription of submittedAnswers) {
       let answer: Answer;
       if ((answer = question.answers.find(answer => answer.description == answerDescription))) {
         if (answer.order < lastOrder) {
-            return 0;
+            // returning early or breaking out of the loop will stop checking if answer exists in the question's answer list
+            wrongOrder = true;
         }
         lastOrder = answer.order;
       } else {
         throw new HttpException(`Submitted answer ${answerDescription} not in the question's "${question.description}" answer list.`, HttpStatus.BAD_REQUEST);
       }
     }
+    if (wrongOrder) {
+      return 0;
+    } 
     return question.points;
   }
   private checkOpenEndedAnswer(questions: Question, submittedAnswers: string[]) {
