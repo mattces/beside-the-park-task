@@ -76,7 +76,7 @@ export class QuizService {
         const answers: Answer[] = [];
         for (const answerInput of questionInput.answers) {
           if (questionInput.type == QuestionType.OpenEnded) {
-            if (answerInput.correct != null || answerInput.order == null) {
+            if (answerInput.correct != null || answerInput.order != null) {
               throw new HttpException(`"OpenEnded" type question answers cannot have 'correct', 'order' properties. (${JSON.stringify(answerInput)}).`, HttpStatus.BAD_REQUEST);
             }
           }
