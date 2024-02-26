@@ -88,8 +88,8 @@ export class ScoreService {
     
     const punctuationPattern =/[^\s\w\d]/g
 
-    const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s/);
-    const correctAnswer = questions.answers[0].description.replace(punctuationPattern, "").toLowerCase().split(/\s/);
+    const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s+/);
+    const correctAnswer = questions.answers[0].description.replace(punctuationPattern, "").toLowerCase().split(/\s+/);
 
     if (submittedAnswer.length != correctAnswer.length) {
       return 0;
