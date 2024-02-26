@@ -137,21 +137,4 @@ export class QuizService {
       }
     }
   }
-
-  async update(id: string, quizObject: DeepPartial<Omit<Quiz, "id" | "questions">>): Promise<Quiz> {
-    try {
-      await this.quizRepository.update(id, quizObject);
-      return await this.findOneById(id);
-    } catch (e) {
-      throw new TypeORMError(`Failed to update quiz (ID ${id}, ${JSON.stringify(quizObject)}): ${e.message}`);
-    }
-  }
-
-  async delete(id: string): Promise<void> {
-    try {
-      await this.quizRepository.delete(id);
-    } catch (e) {
-      throw new TypeORMError(`Failed to delete quiz (ID ${id}): ${e.message}`);
-    }
-  }
 }
