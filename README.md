@@ -1,3 +1,12 @@
+# Launching the app
+
+To launch the app, use:
+```bash
+docker-compose up
+```
+
+Ensure the docker service is running & docker-compose is installed beforehand.
+
 # Quiz creation
 
 The correct quiz creation input schema is as follows:
