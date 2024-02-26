@@ -253,7 +253,21 @@ You can fetch all quizzes using:
 ```graphql
 query {
     quizzes {
-        ... # Quiz object, as described above 
+       id
+       name
+       description
+       questions {
+          id
+          description
+          points
+          type
+          answers {
+             id
+             correct
+             order
+             description
+          }
+       } 
     }
 }
 ```
@@ -263,10 +277,26 @@ You can fetch a quiz by ID using:
 ```graphql
 query {
     quiz(id: "the ID of my quiz") {
-        ... # Quiz object, as described above
+       id
+       name
+       description
+       questions {
+          id
+          description
+          points
+          type
+          answers {
+             id
+             correct
+             order
+             description
+          }
+       } 
     }
 }
 ```
+
+This is of course also the way to fetch all questions for a qiven quiz.
 
 # Unit test coverage
 
