@@ -4,6 +4,7 @@ import { AnswerService } from "../../database/services/answer.service";
 import { Answer } from "../../database/model/answer.entity";
 import { Question, QuestionType } from "../../database/model/question.entity";
 import { Score } from "../resolvers/quiz.output";
+import { last } from "rxjs";
 
 @Injectable()
 export class ScoreService {
@@ -51,30 +52,44 @@ export class ScoreService {
 
     return ((Math.max(correct - incorrect, 0)) / correctQuestionsCount) * question.points;
   }
-  private checkOrderAnswer(question: Question, submittedAnswers: string[]) {
-    const lastOrder = -1;
+  private checkOrderingAnswer(question: Question, submittedAnswers: string[]) {
+    let lastOrder = -1;
 
+    if (submittedAnswers.length < question.answers.length) {
+      throw new HttpException(`Too few answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
+    }
+    if (submittedAnswers.length > question.answers.length) {
+      throw new HttpException(`Too many answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
+    }
+    
+    let wrongOrder = false;
+    
     for (const answerDescription of submittedAnswers) {
       let answer: Answer;
       if ((answer = question.answers.find(answer => answer.description == answerDescription))) {
         if (answer.order < lastOrder) {
-            return 0;
+            // returning early or breaking out of the loop will stop checking if answer exists in the question's answer list
+            wrongOrder = true;
         }
+        lastOrder = answer.order;
       } else {
         throw new HttpException(`Submitted answer ${answerDescription} not in the question's "${question.description}" answer list.`, HttpStatus.BAD_REQUEST);
       }
     }
+    if (wrongOrder) {
+      return 0;
+    } 
     return question.points;
   }
   private checkOpenEndedAnswer(questions: Question, submittedAnswers: string[]) {
     if (submittedAnswers.length > 1) {  
       throw new HttpException("Only one answer can be submitted for a open ended question.", HttpStatus.BAD_REQUEST);
     }
+    
+    const punctuationPattern =/[^\s\w\d]/g
 
-    const punctuationPattern =/[^\s\w\d]gi/
-
-    const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s/);
-    const correctAnswer = questions.answers[0].description.replace(punctuationPattern, "").toLowerCase().split(/\s/);
+    const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s+/);
+    const correctAnswer = questions.answers[0].description.replace(punctuationPattern, "").toLowerCase().split(/\s+/);
 
     if (submittedAnswer.length != correctAnswer.length) {
       return 0;
@@ -121,7 +136,7 @@ export class ScoreService {
           break;
 
         case QuestionType.Ordering:
-          scored += this.checkOrderAnswer(questions[i], answerDescriptions);
+          scored += this.checkOrderingAnswer(questions[i], answerDescriptions);
           break;
         case QuestionType.OpenEnded:
           scored += this.checkOpenEndedAnswer(questions[i], answerDescriptions);
