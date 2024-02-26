@@ -66,7 +66,7 @@ export class SubmitAnswersInput {
 }
 @InputType()
 export class SubmitAnswersForQuestionInput {
-  @Field()
+  @Field(type => [String])
   answerDescriptions: string[]
 }
 
