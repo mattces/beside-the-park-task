@@ -11,13 +11,15 @@
     "start": "nest start",
     "start:dev": "export NODE_ENV=development && nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "export NODE_ENV=production && node dist/main",
+    "start:prod": "export NODE_ENV=production && npm run schema-sync && node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "schema-sync": "npm run typeorm schema:sync -- --dataSource src/model/typeorm/config/"
   },
   "dependencies": {
     "@apollo/server": "^4.10.0",
