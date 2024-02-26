@@ -13,6 +13,15 @@ export class QuestionResolver {
     if (question.answers) {
       return question.answers;
     }
-    return this.answerService.findAll(question.id);
+    return await this.answerService.findAll(question.id)
+      .then(answers => 
+        answers.map(answer => {
+          //Hide answer correctness/order
+          delete answer.order;
+          delete answer.correct;
+            
+          return answer;
+        }
+      ));
   }
 }
