@@ -4,7 +4,9 @@ import { getDataSourceToken, getRepositoryToken } from "@nestjs/typeorm";
 import { Quiz } from "../model/quiz.entity";
 import { HttpException } from "@nestjs/common";
 import { QuestionType } from "../model/question.entity";
-import { CreateAnswerInput, CreateQuestionInput } from "../../quiz/resolvers/quiz.input";
+import { CreateAnswerInput, CreateQuestionInput, CreateQuizInput } from "../../quiz/resolvers/quiz.input";
+import { Type } from "ts-morph";
+import { TypeORMError } from "typeorm";
 
 describe('QuizService', () => {
   let service: QuizService;
@@ -154,6 +156,31 @@ describe('QuizService', () => {
       await expect(service.create({ name: "", description: "", questions: [{...orderingQuestion, answers: [q1, q2, q4] }] })).resolves.not.toThrow()
     });
     
+  });
+  describe("database", () => {
+    const quiz = {
+      name: "",
+      description: "",
+      questions: [{
+        description: "",
+        points: 1,
+        type: QuestionType.SingleChoice,
+        answers: [{ description: "1", correct: false }, { description: "2", correct: true }]
+      }]
+    } as CreateQuizInput;
     
+    it("should start transaction", () => {
+      service.create(quiz);
+      expect(startTransaction).toHaveBeenCalled();
+    });
+    it("should commit transaction", () => {
+      service.create(quiz);
+      expect(commitTransaction).toHaveBeenCalled();
+    });
+    it("should roll transaction back on error", () => {
+      manager.create.mockReturnValueOnce(new TypeORMError("Some error."));
+      service.create(quiz);
+      expect(rollbackTransaction).toHaveBeenCalled();
+    });
   });
 });
