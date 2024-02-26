@@ -21,32 +21,4 @@ export class AnswerService {
       throw new TypeORMError(`Failed to fetch answers for question (ID ${questionId}): ${e.message}`);
     }
   }
-
-  create(answerObject: Omit<Answer, "id">): Answer {
-    try {
-      return this.answerRepository.create(answerObject);
-    } catch (e) {
-      throw new TypeORMError(`Failed to create new answer (${JSON.stringify(answerObject)}): ${e.message}`);
-    }
-  }
-  async update(id: string, answerObject: DeepPartial<Omit<Answer, "id">>): Promise<Answer> {
-      try {
-        await this.answerRepository.update(id, answerObject);
-        /**A find one method will never be needed in this service.*/
-        return await this.answerRepository.findOneBy({id});
-      }
-      catch (e) {
-        throw new TypeORMError(`Failed to update answer (ID ${id}, ${JSON.stringify(answerObject)}): ${e.message}`);
-      } 
-  }
-  
-  async delete(id: string): Promise<void> {
-    try {
-        await this.answerRepository.delete(id);
-    }
-    catch (e) {
-      throw new TypeORMError(`Failed to delete answer (ID ${id}): ${e.message}`);
-    } 
-  }
-  
 } 
