@@ -56,7 +56,7 @@ export class QuizService {
           if (questionInput.answers.length != 1) {
             throw new HttpException(`"OpenEnded" type question must have exactly one answer. (${JSON.stringify(questionInput)}).`, HttpStatus.BAD_REQUEST);
           }
-        } else if (questionInput.answers.length <= 2) {
+        } else if (questionInput.answers.length < 2) {
           throw new HttpException(`Question must have at least two answers. (${JSON.stringify(questionInput)}).`, HttpStatus.BAD_REQUEST);
         }
         
