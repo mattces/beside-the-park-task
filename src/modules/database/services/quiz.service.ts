@@ -74,6 +74,7 @@ export class QuizService {
         
 
         const answers: Answer[] = [];
+        const orders= new Set<number>();
         for (const answerInput of questionInput.answers) {
           if (questionInput.type == QuestionType.OpenEnded) {
             if (answerInput.correct != null || answerInput.order != null) {
@@ -83,6 +84,18 @@ export class QuizService {
           else if (answerInput.correct != null && answerInput.order != null) {
             throw new HttpException(`Answer cannot have both 'order' and 'correct' properties. (${JSON.stringify(answerInput)}).`, HttpStatus.BAD_REQUEST);
           } 
+          if (questionInput.type == QuestionType.Ordering) {
+            if (answerInput.order == null)
+            {
+              throw new HttpException(`"Ordering" type question answer must have 'order' property. (${JSON.stringify(answerInput)}).`, HttpStatus.BAD_REQUEST);
+            } else {
+              if (orders.has(answerInput.order)) {
+                throw new HttpException(`"Ordering" type question answer must have unique 'order'. (${JSON.stringify(answerInput)}).`, HttpStatus.BAD_REQUEST);
+              }
+              orders.add(answerInput.order);
+            }
+            
+          }
           
           const answer = this.queryRunner.manager.create(Answer, { ...answerInput, question: question});
           await this.queryRunner.manager.save(Answer, answer);
