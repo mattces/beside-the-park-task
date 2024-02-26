@@ -47,10 +47,10 @@ export class CreateAnswerInput {
   description: string;
   
   @Field({nullable: true})
-  order: number | null;
+  order?: number;
 
   @Field({nullable: true})
-  correct: boolean | null;
+  correct?: boolean;
 }
 
 @InputType()
