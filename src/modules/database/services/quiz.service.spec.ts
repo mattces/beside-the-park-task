@@ -5,7 +5,6 @@ import { Quiz } from "../model/quiz.entity";
 import { HttpException } from "@nestjs/common";
 import { QuestionType } from "../model/question.entity";
 import { CreateAnswerInput, CreateQuestionInput } from "../../quiz/resolvers/quiz.input";
-import { shouldAskForProject } from "@nestjs/cli/lib/utils/project-utils";
 
 describe('QuizService', () => {
   let service: QuizService;
@@ -112,6 +111,11 @@ describe('QuizService', () => {
       const answers = [{description: "answer!",  order: 0}, {description: "answer2 !", order: 0}];
 
       await expect(service.create({ name: "", description: "", questions: [{...orderingQuestion,  answers: answers }] })).rejects.toThrow(HttpException);
+    });
+    it('should throw HttpException when more correct answers than wrong are provided (MultipleChoice)', async () => {
+      const answers = [{description: "answer!",  correct: true}, {description: "answer2 !", correct: true}, {description: "answer2 !", correct: false }];
+
+      await expect(service.create({ name: "", description: "", questions: [{...multipleChoiceQuestion,  answers: answers }] })).rejects.toThrow(HttpException);
     });
 
 

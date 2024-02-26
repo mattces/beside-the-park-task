@@ -52,6 +52,19 @@ export class QuizService {
 
       
       for (const questionInput of quizInput.questions) {
+        if (questionInput.type == QuestionType.MultipleChoice) {
+          const correctAnswersCount = questionInput.answers.reduce((total, answer) => {
+            if (answer.correct) {
+              return ++total;
+            }
+            return total;
+          }, 0);
+          
+          if (correctAnswersCount > (questionInput.answers.length - correctAnswersCount)) {
+            throw new HttpException(`"MultipleChoice" type question may not have more correct answers than wrong. (${JSON.stringify(questionInput)}).`, HttpStatus.BAD_REQUEST);
+          }
+        } 
+        
         if (questionInput.type == QuestionType.OpenEnded) {
           if (questionInput.answers.length != 1) {
             throw new HttpException(`"OpenEnded" type question must have exactly one answer. (${JSON.stringify(questionInput)}).`, HttpStatus.BAD_REQUEST);
@@ -75,6 +88,7 @@ export class QuizService {
 
         const answers: Answer[] = [];
         const orders= new Set<number>();
+        
         for (const answerInput of questionInput.answers) {
           if (questionInput.type == QuestionType.OpenEnded) {
             if (answerInput.correct != null || answerInput.order != null) {
@@ -84,6 +98,7 @@ export class QuizService {
           else if (answerInput.correct != null && answerInput.order != null) {
             throw new HttpException(`Answer cannot have both 'order' and 'correct' properties. (${JSON.stringify(answerInput)}).`, HttpStatus.BAD_REQUEST);
           } 
+          
           if (questionInput.type == QuestionType.Ordering) {
             if (answerInput.order == null)
             {
