@@ -66,7 +66,7 @@ export class SubmitAnswersInput {
 }
 @InputType()
 export class SubmitAnswersForQuestionInput {
-  @Field(type => [ID])
-  answersIds: string[]
+  @Field()
+  answerDescriptions: string[]
 }
 
