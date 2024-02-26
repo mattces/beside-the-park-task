@@ -4,6 +4,7 @@ import { AnswerService } from "../../database/services/answer.service";
 import { Answer } from "../../database/model/answer.entity";
 import { Question, QuestionType } from "../../database/model/question.entity";
 import { Score } from "../resolvers/quiz.output";
+import { last } from "rxjs";
 
 @Injectable()
 export class ScoreService {
@@ -52,7 +53,7 @@ export class ScoreService {
     return ((Math.max(correct - incorrect, 0)) / correctQuestionsCount) * question.points;
   }
   private checkOrderingAnswer(question: Question, submittedAnswers: string[]) {
-    const lastOrder = -1;
+    let lastOrder = -1;
 
     if (submittedAnswers.length < question.answers.length) {
       throw new HttpException(`Too few answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
@@ -66,6 +67,7 @@ export class ScoreService {
         if (answer.order < lastOrder) {
             return 0;
         }
+        lastOrder = answer.order;
       } else {
         throw new HttpException(`Submitted answer ${answerDescription} not in the question's "${question.description}" answer list.`, HttpStatus.BAD_REQUEST);
       }
