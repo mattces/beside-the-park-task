@@ -51,9 +51,15 @@ export class ScoreService {
 
     return ((Math.max(correct - incorrect, 0)) / correctQuestionsCount) * question.points;
   }
-  private checkOrderAnswer(question: Question, submittedAnswers: string[]) {
+  private checkOrderingAnswer(question: Question, submittedAnswers: string[]) {
     const lastOrder = -1;
 
+    if (submittedAnswers.length < question.answers.length) {
+      throw new HttpException(`Too few answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
+    }
+    if (submittedAnswers.length > question.answers.length) {
+      throw new HttpException(`Too many answers. All of the answers of question "${question.description}" must be submitted, in some order.`, HttpStatus.BAD_REQUEST);
+    }
     for (const answerDescription of submittedAnswers) {
       let answer: Answer;
       if ((answer = question.answers.find(answer => answer.description == answerDescription))) {
@@ -70,7 +76,7 @@ export class ScoreService {
     if (submittedAnswers.length > 1) {  
       throw new HttpException("Only one answer can be submitted for a open ended question.", HttpStatus.BAD_REQUEST);
     }
-
+    
     const punctuationPattern =/[^\s\w\d]gi/
 
     const submittedAnswer = submittedAnswers[0].replace(punctuationPattern, "").toLowerCase().split(/\s/);
@@ -121,7 +127,7 @@ export class ScoreService {
           break;
 
         case QuestionType.Ordering:
-          scored += this.checkOrderAnswer(questions[i], answerDescriptions);
+          scored += this.checkOrderingAnswer(questions[i], answerDescriptions);
           break;
         case QuestionType.OpenEnded:
           scored += this.checkOpenEndedAnswer(questions[i], answerDescriptions);
