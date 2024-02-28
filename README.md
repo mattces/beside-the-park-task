@@ -26,6 +26,13 @@ Then, run:
 ```
 npm run start:dev
 ```
+# API
+
+The app exposes port `3000`, graphql is available through `http://localhost:3000/graphql`.
+
+# GraphQL
+
+GraphQL playground is available on `http://localhost:3000/graphql` `GET`.
 
 # Quiz creation
 
