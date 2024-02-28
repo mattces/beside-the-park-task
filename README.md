@@ -9,6 +9,24 @@ docker-compose up
 
 Ensure the docker service is running & docker-compose is installed beforehand.
 
+# Running development server
+
+Add `.env.development.local` with local postgres database connection info, for example:
+
+```
+# .env.development.local
+POSTGRES_PORT=5432
+POSTGRES_HOST=localhost
+POSTGRES_USER=postgres
+POSTGRES_NAME=postgres
+```
+
+Then, run:
+
+```
+npm run start:dev
+```
+
 # Quiz creation
 
 The correct quiz creation input schema is as follows:
