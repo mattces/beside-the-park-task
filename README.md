@@ -18,7 +18,7 @@ Add `.env.development.local` with local postgres database connection info, for e
 POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 POSTGRES_USER=postgres
-POSTGRES_NAME=postgres
+POSTGRES_DB=postgres
 ```
 
 Then, run:
