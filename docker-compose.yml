@@ -10,12 +10,13 @@ services:
       - db
     env_file:
       - path: .env.local
+        required: false
+      - path: .env.db
         required: true
   db:
     image: postgres:latest
     ports:
       - "3001:5432"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pwd
+    env_file:
+      - path: .env.db
+        required: true
